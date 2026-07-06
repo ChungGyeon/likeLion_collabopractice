@@ -1,0 +1,35 @@
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
+
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--text-main); }
+.input-group input, .input-group select, .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(141, 110, 99, 0.3);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.8);
+    box-sizing: border-box;
+}
+
+.btn-group { display: flex; gap: 10px; margin-top: 30px; }
+.btn-group button { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; }
+.btn-cancel { background: #e0e0e0; color: #333; }
+.btn-primary { background: var(--primary-color); color: white; }

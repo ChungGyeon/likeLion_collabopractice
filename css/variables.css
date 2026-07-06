@@ -1,0 +1,11 @@
+/* css/variables.css (참고용) */
+:root {
+  --primary-color: #8D6E63; /* 따뜻한 브라운 */
+  --primary-hover: #795A4F;
+  --bg-color: #FDFBF7; /* 크림톤 배경 */
+  --text-main: #3E2723;
+  --text-muted: #8D6E63;
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.4);
+}
+body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Pretendard', sans-serif; }

@@ -168,7 +168,3 @@ cafe-app/
 - [ ] `admin/orders/detail.html` — 주문 상세
 - [ ] `admin/orders/detail.css`
 - [ ] `admin/orders/detail.js`
-
-테스트rere
-
-테스토

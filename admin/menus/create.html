@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 - 메뉴 추가</title>
+    <link rel="stylesheet" href="../../css/variables.css">
+    <link rel="stylesheet" href="create.css">
+</head>
+<body>
+    <main class="form-container">
+        <div class="glass-panel">
+            <h2>✨ 새 메뉴 등록</h2>
+            <form id="create-form">
+                <div class="input-group">
+                    <label>카테고리</label>
+                    <select id="category" required>
+                        <option value="coffee">커피</option>
+                        <option value="beverage">음료</option>
+                        <option value="dessert">디저트</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>메뉴명</label>
+                    <input type="text" id="name" required placeholder="예: 아이스 아메리카노">
+                </div>
+                <div class="input-group">
+                    <label>가격 (원)</label>
+                    <input type="number" id="price" required placeholder="예: 4500">
+                </div>
+                <div class="input-group">
+                    <label>설명</label>
+                    <textarea id="description" rows="3" placeholder="메뉴에 대한 설명을 적어주세요."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+                    <button type="submit" class="btn-primary">등록하기</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="create.js"></script>
+</body>
+</html>
