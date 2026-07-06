@@ -1,0 +1,120 @@
+body {
+    background: linear-gradient(135deg, #f7f3f0 0%, #ebe3db 100%);
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    color: #4a3e3d;
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #5c443c;
+}
+
+/* Glassmorphism 컨테이너 */
+.detail-card {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.detail-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 20px;
+}
+
+.item-meta h2 {
+    margin: 0 0 8px 0;
+    font-size: 1.5rem;
+    color: #3d2b25;
+}
+
+.item-description {
+    color: #7a6b68;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* 옵션 선택 세션 */
+.option-section {
+    margin-top: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 15px;
+}
+
+.option-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.option-group {
+    display: flex;
+    gap: 10px;
+}
+
+.option-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.option-btn.selected {
+    background: #8c6239;
+    color: white;
+    border-color: #8c6239;
+}
+
+/* 구매 내비게이션 바 */
+.purchase-section {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-price-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #5c443c;
+}
+
+.btn-add-basket {
+    background: #6f4e37;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 16px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(111, 78, 55, 0.25);
+}

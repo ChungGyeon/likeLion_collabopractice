@@ -1,0 +1,113 @@
+body {
+    background: linear-gradient(135deg, #f7f3f0 0%, #ebe3db 100%);
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    color: var(--text-color, #4a3e3d);
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Glassmorphism 헤더 */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    margin-bottom: 20px;
+}
+
+.menu-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #5c443c;
+}
+
+/* 카테고리 탭 */
+.category-nav {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.category-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-item {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.tab-item.active {
+    background: #6f4e37;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(111, 78, 55, 0.3);
+}
+
+/* Glassmorphism 메뉴 카드 그리드 */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.menu-card {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(92, 68, 60, 0.1);
+}
+
+.menu-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background: #e8ded4;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    object-fit: cover;
+}
+
+.menu-info h3 {
+    margin: 5px 0;
+    font-size: 1.05rem;
+    color: #3d2b25;
+}
+
+.menu-price {
+    font-weight: 700;
+    color: #8c6239;
+    font-size: 0.95rem;
+}

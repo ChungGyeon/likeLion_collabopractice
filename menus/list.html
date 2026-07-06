@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAFE - 메뉴 목록</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="list.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="menu-header">
+            <button class="btn-back" onclick="history.back()">←</button>
+            <h1>MENU</h1>
+            <a href="../basket/list.html" class="btn-cart">🛒 <span id="cart-count">0</span></a>
+        </header>
+
+        <nav class="category-nav" id="category-tabs">
+            </nav>
+
+        <main class="menu-main">
+            <div class="menu-grid" id="menu-grid">
+                </div>
+        </main>
+    </div>
+
+    <script type="module" src="list.js"></script>
+</body>
+</html>
