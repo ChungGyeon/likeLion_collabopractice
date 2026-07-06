@@ -169,4 +169,4 @@ cafe-app/
 - [ ] `admin/orders/detail.css`
 - [ ] `admin/orders/detail.js`
 
-테스트
+테스트rere
