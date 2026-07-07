@@ -108,66 +108,66 @@ cafe-app/
 
 ### 2단계: 관리자 - 메뉴 관리 시스템
 
-- [ ] `admin/menus/list.html` — 메뉴 목록
-- [ ] `admin/menus/list.css`
-- [ ] `admin/menus/list.js`
-- [ ] `admin/menus/detail.html` — 메뉴 상세
-- [ ] `admin/menus/detail.css`
-- [ ] `admin/menus/detail.js`
-- [ ] `admin/menus/create.html` — 메뉴 추가
-- [ ] `admin/menus/create.css`
-- [ ] `admin/menus/create.js`
-- [ ] `admin/menus/edit.html` — 메뉴 수정
-- [ ] `admin/menus/edit.css`
-- [ ] `admin/menus/edit.js`
+- [x] `admin/menus/list.html` — 메뉴 목록
+- [x] `admin/menus/list.css`
+- [x] `admin/menus/list.js`
+- [x] `admin/menus/detail.html` — 메뉴 상세
+- [x] `admin/menus/detail.css`
+- [x] `admin/menus/detail.js`
+- [x] `admin/menus/create.html` — 메뉴 추가
+- [x] `admin/menus/create.css`
+- [x] `admin/menus/create.js`
+- [x] `admin/menus/edit.html` — 메뉴 수정
+- [x] `admin/menus/edit.css`
+- [x] `admin/menus/edit.js`
 
 ### 3단계: 고객 - 메뉴 조회 시스템
 
-- [ ] `menus/list.html` — 메뉴 목록
-- [ ] `menus/list.css`
-- [ ] `menus/list.js`
-- [ ] `menus/detail.html` — 메뉴 상세
-- [ ] `menus/detail.css`
-- [ ] `menus/detail.js`
+- [x] `menus/list.html` — 메뉴 목록
+- [x] `menus/list.css`
+- [x] `menus/list.js`
+- [x] `menus/detail.html` — 메뉴 상세
+- [x] `menus/detail.css`
+- [x] `menus/detail.js`
 
 ### 4단계: 고객 - 장바구니 관리 시스템
 
-- [ ] `basket/list.html` — 장바구니
-- [ ] `basket/list.css`
-- [ ] `basket/list.js`
+- [x] `basket/list.html` — 장바구니
+- [x] `basket/list.css`
+- [x] `basket/list.js`
 
 ### 5단계: 고객 - 주문 관리 시스템
 
-- [ ] `orders/list.html` — 주문 내역 목록
-- [ ] `orders/list.css`
-- [ ] `orders/list.js`
-- [ ] `orders/detail.html` — 주문 상세
-- [ ] `orders/detail.css`
-- [ ] `orders/detail.js`
+- [x] `orders/list.html` — 주문 내역 목록
+- [x] `orders/list.css`
+- [x] `orders/list.js`
+- [x] `orders/detail.html` — 주문 상세
+- [x] `orders/detail.css`
+- [x] `orders/detail.js`
 
 ### 6단계: 고객 - 메인 페이지
 
-- [ ] `index.html`
-- [ ] `index.css`
-- [ ] `index.js`
+- [x] `index.html`
+- [x] `index.css`
+- [x] `index.js`
 
 ### 7단계: 고객 - 마이페이지
 
-- [ ] `my/index.html`
-- [ ] `my/index.css`
-- [ ] `my/index.js`
+- [x] `my/index.html`
+- [x] `my/index.css`
+- [x] `my/index.js`
 
 ### 8단계: 관리자 - 대시보드 & 주문 관리
 
-- [ ] `admin/index.html` — 대시보드
-- [ ] `admin/index.css`
-- [ ] `admin/index.js`
-- [ ] `admin/orders/list.html` — 주문 목록
-- [ ] `admin/orders/list.css`
-- [ ] `admin/orders/list.js`
-- [ ] `admin/orders/detail.html` — 주문 상세
-- [ ] `admin/orders/detail.css`
-- [ ] `admin/orders/detail.js`
+- [x] `admin/index.html` — 대시보드
+- [x] `admin/index.css`
+- [x] `admin/index.js`
+- [x] `admin/orders/list.html` — 주문 목록
+- [x] `admin/orders/list.css`
+- [x] `admin/orders/list.js`
+- [x] `admin/orders/detail.html` — 주문 상세
+- [x] `admin/orders/detail.css`
+- [x] `admin/orders/detail.js`
 
 테스트rere
 
