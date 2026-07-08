@@ -1,5 +1,4 @@
-// 임시 formatPrice 함수. 원래 파일 '../../js/utils.js'를 찾을 수 없어 임시로 정의합니다.
-const formatPrice = (price) => `${price.toLocaleString()}원`;
+import { formatPrice } from '../../js/utils.js';   
 
 // 주문 상태 정의
 const ORDER_STATUSES = ['주문 완료', '준비중', '준비 완료'];
