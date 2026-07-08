@@ -250,6 +250,28 @@ body {
     gap: 1rem;
 }
 
+.order-items-list li {
+    background: white;
+    margin: 5px 0;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: slideInRight 0.4s ease-out backwards;
+}
+
+.order-items-list li:hover {
+    transform: translateX(6px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
 .item-row {
     display: flex;
     align-items: center;

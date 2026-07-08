@@ -1,51 +1,30 @@
-// 장바구니 관리 스크립트 - 에러 수정 및 로직 개선
+// 장바구니 관리 스크립트
 const basketItems = [
-    { id: 1, name: '아메리카노', price: 4000, img: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=150&q=80' },
-    { id: 2, name: '카페라떼', price: 4500, img: 'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=150&q=80' },
-    { id: 3, name: '딸기 스무디', price: 5500, img: 'https://images.unsplash.com/photo-1638176066666-ffb2f013c70a?w=150&q=80' },
+    { id: 1, name: '아메리카노', price: 4000 },
+    { id: 2, name: '카페라떼', price: 4500 },
+    { id: 3, name: '딸기 스무디', price: 5500 },
 ];
+<!DOCTYPE html>
+const basketList = document.getElementById('basket-items');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const basketList = document.getElementById('basket-items');
-    const totalPriceEl = document.getElementById('total-price');
-    let total = 0;
-
-    // 초기화
-    basketList.innerHTML = '';
-
-    basketItems.forEach((item, index) => {
-        total += item.price;
-        const listItem = document.createElement('li');
-        listItem.className = 'basket-item';
-        
-        // 순차적인 등장 애니메이션 적용
-        listItem.style.animation = `fadeIn 0.4s ease-out ${index * 0.1}s backwards`;
-        
-        listItem.innerHTML = `
-            <div class="item-img">
-                <img src="${item.img}" alt="${item.name}">
-            </div>
-            <div class="item-details">
-                <div class="item-name">${item.name}</div>
-                <div class="item-price">${item.price.toLocaleString()}원</div>
-            </div>
-            <div class="item-actions">
-                <button class="delete-btn" onclick="alert('삭제 기능은 추후 연동됩니다.')">
-                    <i class="ph ph-trash"></i>
-                </button>
-            </div>
-        `;
-        basketList.appendChild(listItem);
-    });
-
-    // 총 금액 업데이트
-    totalPriceEl.textContent = `${total.toLocaleString()}원`;
-    
-    // 주문하기 버튼
-    const checkoutBtn = document.querySelector('.btn-primary');
-    if(checkoutBtn) {
-        checkoutBtn.addEventListener('click', () => {
-            alert('주문이 완료되었습니다!');
-        });
-    }
+basketItems.forEach(item => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${item.name} - ${item.price.toLocaleString()}원`;
+    basketList.appendChild(listItem);
 });
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장바구니</title>
+    <link rel="stylesheet" href="list.css">
+</head>
+<body>
+    <h1>장바구니</h1>
+    <ul id="basket-items">
+        <!-- 장바구니 아이템이 여기에 추가됩니다 -->
+    </ul>
+    <script src="list.js"></script>
+</body>
+</html>
+
