@@ -1,46 +1,4 @@
-// 주문 목록 스크립트
-const orders = [
-    { id: 1, customer: '홍길동', date: '2026-07-07', total: 15000, status: 'completed', items: [{ name: '아메리카노', qty: 2 }] },
-    { id: 2, customer: '김철수', date: '2026-07-07', total: 20000, status: 'pending', items: [{ name: '카페라떼', qty: 1 }, { name: '케이크', qty: 1 }] },
-    { id: 3, customer: '이영희', date: '2026-07-06', total: 25000, status: 'cancelled', items: [{ name: '카푸치노', qty: 3 }] },
-    { id: 4, customer: '박민수', date: '2026-07-06', total: 10000, status: 'completed', items: [{ name: '녹차', qty: 1 }] },
-    { id: 5, customer: '최수진', date: '2026-07-05', total: 30000, status: 'pending', items: [{ name: '샌드위치', qty: 2 }, { name: '아이스티', qty: 1 }] },
-];
-
-const orderListGrid = document.getElementById('order-list-grid');
-const noOrdersMessage = document.getElementById('no-orders');
-
-function displayOrders(orderArray) {
-    orderListGrid.innerHTML = ''; // Clear existing orders
-
-    if (orderArray.length === 0) {
-        noOrdersMessage.style.display = 'block';
-        return;
-    }
-
-    noOrdersMessage.style.display = 'none';
-    orderArray.forEach(order => {
-        const orderItem = document.createElement('div');
-        orderItem.classList.add('order-item');
-        orderItem.innerHTML = `
-            <h3>주문 번호: ${order.id}</h3>
-            <p><strong>고객:</strong> ${order.customer}</p>
-            <p><strong>날짜:</strong> ${order.date}</p>
-            <p><strong>총 금액:</strong> ${order.total.toLocaleString()}원</p>
-            <p><strong>상태:</strong> <span class="status ${order.status}">${order.status}</span></p>
-            <p><strong>아이템:</strong> ${order.items.map(item => `${item.name} (${item.qty})`).join(', ')}</p>
-            <a href="detail.html?orderId=${order.id}">상세 보기</a>
-        `;
-        orderListGrid.appendChild(orderItem);
-    });
-}
-
-// Display only the 2-3 most recent orders initially
-const recentOrders = orders.slice(0, 3); // Get the 3 most recent orders
-displayOrders(recentOrders);
-
-// In a real application, you would fetch data from a backend
-// Example: fetch('/api/admin/orders').then(res => res.json()).then(data => displayOrders(data));
+// 기본 메뉴 데이터 (localStorage가 비어있을 때 사용)
 const defaultMenus = [
     { id: 1, category: '커피', name: '아메리카노', price: 4500, status: '판매중', image: '☕️' },
     { id: 2, category: '커피', name: '카페 라떼', price: 5000, status: '판매중', image: '☕️' },
@@ -50,43 +8,61 @@ const defaultMenus = [
     { id: 6, category: '음료', name: '자몽 에이드', price: 5500, status: '판매중', image: '🍹' }
 ];
 
-function loadMenus() {
-    let menus = localStorage.getItem('cafeMenus');
-    if (!menus) {
-        localStorage.setItem('cafeMenus', JSON.stringify(defaultMenus));
-        menus = defaultMenus;
+// 페이지가 로드될 때 메뉴 목록을 불러오는 함수
+function loadMenus(menusToRender) {
+    let menus;
+    // 인자로 메뉴 목록이 들어오지 않으면 localStorage에서 불러옴
+    if (!menusToRender) {
+        const storedMenus = localStorage.getItem('cafeMenus');
+        if (!storedMenus) {
+            // localStorage가 비어있으면 기본 메뉴로 초기화
+            localStorage.setItem('cafeMenus', JSON.stringify(defaultMenus));
+            menus = defaultMenus;
+        } else {
+            menus = JSON.parse(storedMenus);
+        }
     } else {
-        menus = JSON.parse(menus);
+        menus = menusToRender;
     }
 
     const tbody = document.getElementById('menuTableBody');
-    tbody.innerHTML = '';
+    tbody.innerHTML = ''; // 기존 내용을 비움
 
     menus.forEach(menu => {
         const statusClass = menu.status === '판매중' ? 'badge completed' : 'badge pending';
         const tr = document.createElement('tr');
         tr.innerHTML = `
-                <td><div class="menu-thumbnail">${menu.image}</div></td>
-                <td><span class="category-tag">${menu.category}</span></td>
-                <td class="menu-name">${menu.name}</td>
-                <td>₩${menu.price.toLocaleString()}</td>
-                <td><span class="${statusClass}">${menu.status}</span></td>
-                <td>
-                    <button class="btn-small edit">수정</button>
-                    <button class="btn-small delete" onclick="deleteMenu(${menu.id})">삭제</button>
-                </td>
-            `;
+            <td><div class="menu-thumbnail">${menu.image}</div></td>
+            <td><span class="category-tag">${menu.category}</span></td>
+            <td class="menu-name">${menu.name}</td>
+            <td>₩${menu.price.toLocaleString()}</td>
+            <td><span class="${statusClass}">${menu.status}</span></td>
+            <td>
+                <button class="btn-small edit" onclick="location.href='edit.html?id=${menu.id}'">수정</button>
+                <button class="btn-small delete" onclick="deleteMenu(${menu.id})">삭제</button>
+            </td>
+        `;
         tbody.appendChild(tr);
     });
 }
 
+// 메뉴 삭제 함수
 function deleteMenu(id) {
-    if(confirm('정말 삭제하시겠습니까?')) {
+    if(confirm('정말 이 메뉴를 삭제하시겠습니까?')) {
         let menus = JSON.parse(localStorage.getItem('cafeMenus'));
         menus = menus.filter(menu => menu.id !== id);
         localStorage.setItem('cafeMenus', JSON.stringify(menus));
-        loadMenus();
+        loadMenus(); // 목록 새로고침
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadMenus);
+// 검색 기능
+document.getElementById('searchInput').addEventListener('keyup', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const menus = JSON.parse(localStorage.getItem('cafeMenus'));
+    const filteredMenus = menus.filter(menu => menu.name.toLowerCase().includes(searchTerm));
+    loadMenus(filteredMenus); // 필터링된 결과로 목록 다시 렌더링
+});
+
+// 페이지 첫 로드 시 실행
+document.addEventListener('DOMContentLoaded', () => loadMenus());

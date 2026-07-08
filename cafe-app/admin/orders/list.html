@@ -3,32 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>관리자 주문 목록</title>
-    <link rel="stylesheet" href="list.css">
-    <link rel="stylesheet" href="redesign-admin-orders-list.css">
-</head>
-<body>
-    <header class="page-header">
-        <button class="btn-icon" onclick="location.href='../index.html'">◀ 관리자 홈</button>
-        <h1>관리자 주문 목록</h1>
-        <div style="width: 60px;"></div>
-    </header>
-
-    <main class="admin-container">
-        <section class="admin-card">
-            <h2>최근 주문</h2>
-            <div id="order-list-grid" class="order-list-grid">
-                <!-- 주문 데이터가 여기에 추가됩니다 -->
-                <p id="no-orders" class="no-orders" style="display: none;">주문이 없습니다.</p>
-            </div>
-        </section>
-    </main>
-
-    <script src="list.js"></script>
-</body>
-</html>
     <title>메뉴 관리 - 카페 관리자</title>
-    <!-- 공용 CSS 제거, 단일 CSS로 구동 -->
+    <link rel="stylesheet" href="../index.css">
     <link rel="stylesheet" href="./list.css">
 </head>
 <body>
@@ -38,10 +14,10 @@
         <div class="logo">Cafe Admin</div>
         <nav>
             <ul>
-                <li><a href="../../index.html">대시보드 홈</a></li>
+                <li><a href="../index.html">대시보드 홈</a></li>
                 <li><a href="#">실시간 주문 목록</a></li>
                 <li><a href="list.html" class="active">메뉴 관리 (목록)</a></li>
-                <li><a href="add.html">새 메뉴 추가</a></li>
+                <li><a href="create.html">새 메뉴 추가</a></li>
             </ul>
         </nav>
     </aside>
@@ -58,7 +34,7 @@
                 <h2>전체 메뉴 목록</h2>
                 <div class="list-actions">
                     <input type="text" id="searchInput" placeholder="메뉴명 검색..." class="search-input">
-                    <button class="action-btn" onclick="location.href='add.html'">+ 새 메뉴 추가</button>
+                    <button class="action-btn" onclick="location.href='create.html'">+ 새 메뉴 추가</button>
                 </div>
             </div>
 
