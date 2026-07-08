@@ -30,7 +30,7 @@ function loadDashboardData() {
             <td>₩${menu.price.toLocaleString()}</td>
             <td><span class="${statusClass}">${menu.status}</span></td>
             <td>
-                <button class="btn-small edit" onclick="location.href='orders/edit.html?id=${menu.id}'">수정</button>
+                <button class="btn-small edit" onclick="location.href='menus/edit.html?id=${menu.id}'">수정</button>
                 <button class="btn-small delete" onclick="deleteMenu(${menu.id})">삭제</button>
             </td>
         `;
