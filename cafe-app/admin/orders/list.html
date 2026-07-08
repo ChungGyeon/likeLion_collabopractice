@@ -3,6 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 주문 목록</title>
+    <link rel="stylesheet" href="list.css">
+    <link rel="stylesheet" href="redesign-admin-orders-list.css">
+</head>
+<body>
+    <header class="page-header">
+        <button class="btn-icon" onclick="location.href='../index.html'">◀ 관리자 홈</button>
+        <h1>관리자 주문 목록</h1>
+        <div style="width: 60px;"></div>
+    </header>
+
+    <main class="admin-container">
+        <section class="admin-card">
+            <h2>최근 주문</h2>
+            <div id="order-list-grid" class="order-list-grid">
+                <!-- 주문 데이터가 여기에 추가됩니다 -->
+                <p id="no-orders" class="no-orders" style="display: none;">주문이 없습니다.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="list.js"></script>
+</body>
+</html>
     <title>메뉴 관리 - 카페 관리자</title>
     <!-- 공용 CSS 제거, 단일 CSS로 구동 -->
     <link rel="stylesheet" href="./list.css">
