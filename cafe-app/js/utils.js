@@ -23,16 +23,4 @@ function addToCart(cart, item) {
 }
 
 export { formatPrice, addToCart };
-:root {
-  --primary-color: #6b4f4f;
-  --secondary-color: #f5f5dc;
-  --font-family: 'Arial', sans-serif;
-  --font-size-base: 16px;
-}
 
-/* 리셋 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
