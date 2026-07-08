@@ -13,10 +13,10 @@
         <div class="logo">Cafe Admin</div>
         <nav>
             <ul>
-                <li><a href="#" class="active">대시보드 홈</a></li>
+                <li><a href="index.html" class="active">대시보드 홈</a></li>
                 <li><a href="#">실시간 주문 목록</a></li>
-                <li><a href="#">메뉴 관리 (목록/상세)</a></li>
-                <li><a href="#">새 메뉴 추가</a></li>
+                <li><a href="orders/list.html">메뉴 관리</a></li>
+                <li><a href="orders/create.html">새 메뉴 추가</a></li>
             </ul>
         </nav>
     </aside>
@@ -40,7 +40,7 @@
             </div>
             <div class="stat-card">
                 <h3>활성 메뉴</h3>
-                <p class="stat-value">24개</p>
+                <p id="activeMenuCount" class="stat-value">0개</p>
             </div>
         </section>
 
@@ -50,47 +50,33 @@
             <div class="card">
                 <h2>빠른 실행</h2>
                 <div class="action-buttons">
-                    <button class="action-btn">새 메뉴 추가하기</button>
+                    <button class="action-btn" onclick="location.href='orders/create.html'">새 메뉴 추가하기</button>
                     <button class="action-btn outline">품절/숨김 처리하기</button>
                 </div>
             </div>
 
-            <!-- 최근 주문 테이블 -->
+            <!-- 메뉴 목록 테이블 -->
             <div class="card table-container">
-                <h2>최근 접수된 주문</h2>
+                <h2>메뉴 현황</h2>
                 <table class="data-table">
                     <thead>
                     <tr>
-                        <th>주문 번호</th>
-                        <th>주문 내역</th>
+                        <th>이미지</th>
+                        <th>카테고리</th>
+                        <th>메뉴명</th>
+                        <th>가격</th>
                         <th>상태</th>
-                        <th>주문 시간</th>
+                        <th>관리</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>#1042</td>
-                        <td>아이스 아메리카노 외 2건</td>
-                        <td><span class="badge pending">준비 중</span></td>
-                        <td>10:42 AM</td>
-                    </tr>
-                    <tr>
-                        <td>#1041</td>
-                        <td>카페 라떼 (시럽 추가)</td>
-                        <td><span class="badge completed">제조 완료</span></td>
-                        <td>10:35 AM</td>
-                    </tr>
-                    <tr>
-                        <td>#1040</td>
-                        <td>초코무스 케이크</td>
-                        <td><span class="badge completed">픽업 완료</span></td>
-                        <td>10:15 AM</td>
-                    </tr>
+                    <tbody id="dashboardMenuTableBody">
+                    <!-- JS를 통해 메뉴 데이터가 렌더링됩니다 -->
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 </div>
+<script src="index.js"></script>
 </body>
 </html>

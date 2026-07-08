@@ -1,92 +1,128 @@
-// 주문 목록 스크립트
-const orders = [
-    { id: 1, customer: '홍길동', date: '2026-07-07', total: 15000, status: 'completed', items: [{ name: '아메리카노', qty: 2 }] },
-    { id: 2, customer: '김철수', date: '2026-07-07', total: 20000, status: 'pending', items: [{ name: '카페라떼', qty: 1 }, { name: '케이크', qty: 1 }] },
-    { id: 3, customer: '이영희', date: '2026-07-06', total: 25000, status: 'cancelled', items: [{ name: '카푸치노', qty: 3 }] },
-    { id: 4, customer: '박민수', date: '2026-07-06', total: 10000, status: 'completed', items: [{ name: '녹차', qty: 1 }] },
-    { id: 5, customer: '최수진', date: '2026-07-05', total: 30000, status: 'pending', items: [{ name: '샌드위치', qty: 2 }, { name: '아이스티', qty: 1 }] },
-];
+import { formatPrice } from '../../js/utils.js';
 
-const orderListGrid = document.getElementById('order-list-grid');
-const noOrdersMessage = document.getElementById('no-orders');
+// 주문 상태 정의
+const ORDER_STATUSES = ['주문 완료', '준비중', '준비 완료'];
 
-function displayOrders(orderArray) {
-    orderListGrid.innerHTML = ''; // Clear existing orders
-
-    if (orderArray.length === 0) {
-        noOrdersMessage.style.display = 'block';
-        return;
-    }
-
-    noOrdersMessage.style.display = 'none';
-    orderArray.forEach(order => {
-        const orderItem = document.createElement('div');
-        orderItem.classList.add('order-item');
-        orderItem.innerHTML = `
-            <h3>주문 번호: ${order.id}</h3>
-            <p><strong>고객:</strong> ${order.customer}</p>
-            <p><strong>날짜:</strong> ${order.date}</p>
-            <p><strong>총 금액:</strong> ${order.total.toLocaleString()}원</p>
-            <p><strong>상태:</strong> <span class="status ${order.status}">${order.status}</span></p>
-            <p><strong>아이템:</strong> ${order.items.map(item => `${item.name} (${item.qty})`).join(', ')}</p>
-            <a href="detail.html?orderId=${order.id}">상세 보기</a>
-        `;
-        orderListGrid.appendChild(orderItem);
-    });
+// 날짜 포맷팅 함수
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
 }
 
-// Display only the 2-3 most recent orders initially
-const recentOrders = orders.slice(0, 3); // Get the 3 most recent orders
-displayOrders(recentOrders);
-
-// In a real application, you would fetch data from a backend
-// Example: fetch('/api/admin/orders').then(res => res.json()).then(data => displayOrders(data));
-const defaultMenus = [
-    { id: 1, category: '커피', name: '아메리카노', price: 4500, status: '판매중', image: '☕️' },
-    { id: 2, category: '커피', name: '카페 라떼', price: 5000, status: '판매중', image: '☕️' },
-    { id: 3, category: '커피', name: '바닐라 라떼', price: 5500, status: '판매중', image: '☕️' },
-    { id: 4, category: '커피', name: '콜드브루', price: 5000, status: '품절', image: '🧊' },
-    { id: 5, category: '디저트', name: '초코무스 케이크', price: 6500, status: '판매중', image: '🍰' },
-    { id: 6, category: '음료', name: '자몽 에이드', price: 5500, status: '판매중', image: '🍹' }
+// 기본 주문 데이터 (localStorage가 비어있을 때 사용)
+const defaultOrders = [
+    {
+        id: 1,
+        orderTime: new Date().toISOString(),
+        items: [
+            { name: '아메리카노', quantity: 2 },
+            { name: '초코무스 케이크', quantity: 1 }
+        ],
+        totalPrice: 15500,
+        status: ORDER_STATUSES[0] // 주문 완료
+    },
+    {
+        id: 2,
+        orderTime: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+        items: [
+            { name: '카페 라떼', quantity: 1 }
+        ],
+        totalPrice: 5000,
+        status: ORDER_STATUSES[1] // 준비중
+    }
 ];
 
-function loadMenus() {
-    let menus = localStorage.getItem('cafeMenus');
-    if (!menus) {
-        localStorage.setItem('cafeMenus', JSON.stringify(defaultMenus));
-        menus = defaultMenus;
-    } else {
-        menus = JSON.parse(menus);
+// 페이지가 로드될 때 주문 목록을 불러오는 함수
+function loadOrders() {
+    const storedOrders = localStorage.getItem('cafeOrders');
+    let orders = storedOrders ? JSON.parse(storedOrders) : defaultOrders;
+
+    // localStorage가 비어있으면 기본 주문으로 초기화
+    if (!storedOrders) {
+        localStorage.setItem('cafeOrders', JSON.stringify(defaultOrders));
     }
 
-    const tbody = document.getElementById('menuTableBody');
-    tbody.innerHTML = '';
+    const tbody = document.getElementById('orderTableBody');
+    tbody.innerHTML = ''; // 기존 내용을 비움
 
-    menus.forEach(menu => {
-        const statusClass = menu.status === '판매중' ? 'badge completed' : 'badge pending';
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">현재 주문이 없습니다.</td></tr>';
+        return;
+    }
+    
+    // 최신 주문이 위로 오도록 정렬
+    orders.sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime));
+
+    orders.forEach(order => {
+        const statusClass = getStatusClass(order.status);
+        const menuSummary = order.items.length > 1
+            ? `${order.items[0].name} 외 ${order.items.length - 1}건`
+            : order.items[0].name;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-                <td><div class="menu-thumbnail">${menu.image}</div></td>
-                <td><span class="category-tag">${menu.category}</span></td>
-                <td class="menu-name">${menu.name}</td>
-                <td>₩${menu.price.toLocaleString()}</td>
-                <td><span class="${statusClass}">${menu.status}</span></td>
-                <td>
-                    <button class="btn-small edit">수정</button>
-                    <button class="btn-small delete" onclick="deleteMenu(${menu.id})">삭제</button>
-                </td>
-            `;
+            <td>#${String(order.id).padStart(4, '0')}</td>
+            <td>${formatDate(order.orderTime)}</td>
+            <td class="menu-name">${menuSummary}</td>
+            <td>${formatPrice(order.totalPrice)}</td>
+            <td><span class="badge ${statusClass}">${order.status}</span></td>
+            <td>
+                ${generateStatusButtons(order.id, order.status)}
+            </td>
+        `;
         tbody.appendChild(tr);
     });
 }
 
-function deleteMenu(id) {
-    if(confirm('정말 삭제하시겠습니까?')) {
-        let menus = JSON.parse(localStorage.getItem('cafeMenus'));
-        menus = menus.filter(menu => menu.id !== id);
-        localStorage.setItem('cafeMenus', JSON.stringify(menus));
-        loadMenus();
+// 주문 상태에 따른 CSS 클래스를 반환하는 함수
+function getStatusClass(status) {
+    if (status === '주문 완료') return 'pending';
+    if (status === '준비중') return 'processing';
+    if (status === '준비 완료') return 'completed';
+    return '';
+}
+
+// 주문 상태 변경 버튼을 생성하는 함수
+function generateStatusButtons(orderId, currentStatus) {
+    const currentIndex = ORDER_STATUSES.indexOf(currentStatus);
+    let buttonsHtml = '';
+
+    if (currentIndex < ORDER_STATUSES.length - 1) {
+        const nextStatus = ORDER_STATUSES[currentIndex + 1];
+        buttonsHtml += `<button class="btn-small edit" onclick="updateOrderStatus(${orderId}, '${nextStatus}')">${nextStatus}으로</button>`;
+    }
+    
+    if (currentIndex > 0) {
+        const prevStatus = ORDER_STATUSES[currentIndex - 1];
+        buttonsHtml += `<button class="btn-small delete" onclick="updateOrderStatus(${orderId}, '${prevStatus}')">이전으로</button>`;
+    }
+    
+    return buttonsHtml;
+}
+
+// 주문 상태 업데이트 함수
+window.updateOrderStatus = function(orderId, newStatus) {
+    let orders = JSON.parse(localStorage.getItem('cafeOrders'));
+    const orderIndex = orders.findIndex(o => o.id === orderId);
+
+    if (orderIndex !== -1) {
+        orders[orderIndex].status = newStatus;
+        localStorage.setItem('cafeOrders', JSON.stringify(orders));
+        loadOrders(); // 목록 새로고침
     }
 }
 
-document.addEventListener('DOMContentLoaded', loadMenus);
+// --- 초기화 및 실시간 업데이트 ---
+
+// 2초마다 주문 목록을 새로고침하여 실시간처럼 보이게 함
+setInterval(loadOrders, 2000);
+
+// 다른 탭에서 localStorage가 변경되었을 때 목록을 새로고침
+window.addEventListener('storage', function(e) {
+    if (e.key === 'cafeOrders') {
+        loadOrders();
+    }
+});
+
+// 페이지 첫 로드 시 실행
+document.addEventListener('DOMContentLoaded', loadOrders);
