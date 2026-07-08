@@ -1,4 +1,5 @@
-import { formatPrice } from '../../js/utils.js';
+// 임시 formatPrice 함수. 원래 파일 '../../js/utils.js'를 찾을 수 없어 임시로 정의합니다.
+const formatPrice = (price) => `${price.toLocaleString()}원`;
 
 // 주문 상태 정의
 const ORDER_STATUSES = ['주문 완료', '준비중', '준비 완료'];
@@ -15,31 +16,25 @@ const defaultOrders = [
         id: 1,
         orderTime: new Date().toISOString(),
         items: [
-            { name: '아메리카노', quantity: 2 },
-            { name: '초코무스 케이크', quantity: 1 }
+            { name: '아메리카노', quantity: 1 },
+            { name: '치즈케이크', quantity: 1 }
         ],
-        totalPrice: 15500,
+        totalPrice: 9500,
         status: ORDER_STATUSES[0] // 주문 완료
-    },
-    {
-        id: 2,
-        orderTime: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-        items: [
-            { name: '카페 라떼', quantity: 1 }
-        ],
-        totalPrice: 5000,
-        status: ORDER_STATUSES[1] // 준비중
     }
 ];
 
 // 페이지가 로드될 때 주문 목록을 불러오는 함수
 function loadOrders() {
     const storedOrders = localStorage.getItem('cafeOrders');
-    let orders = storedOrders ? JSON.parse(storedOrders) : defaultOrders;
+    let orders;
 
-    // localStorage가 비어있으면 기본 주문으로 초기화
-    if (!storedOrders) {
+    // localStorage가 비어있거나, 파싱된 배열의 길이가 0이면 기본 주문으로 초기화
+    if (!storedOrders || JSON.parse(storedOrders).length === 0) {
+        orders = defaultOrders;
         localStorage.setItem('cafeOrders', JSON.stringify(defaultOrders));
+    } else {
+        orders = JSON.parse(storedOrders);
     }
 
     const tbody = document.getElementById('orderTableBody');
@@ -61,7 +56,7 @@ function loadOrders() {
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>#${String(order.id).padStart(4, '0')}</td>
+            <td><a href="detail.html?id=${order.id}" class="order-id-link">#${String(order.id).padStart(4, '0')}</a></td>
             <td>${formatDate(order.orderTime)}</td>
             <td class="menu-name">${menuSummary}</td>
             <td>${formatPrice(order.totalPrice)}</td>
