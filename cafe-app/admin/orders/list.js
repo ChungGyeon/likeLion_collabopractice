@@ -1,68 +1,128 @@
-// 기본 메뉴 데이터 (localStorage가 비어있을 때 사용)
-const defaultMenus = [
-    { id: 1, category: '커피', name: '아메리카노', price: 4500, status: '판매중', image: '☕️' },
-    { id: 2, category: '커피', name: '카페 라떼', price: 5000, status: '판매중', image: '☕️' },
-    { id: 3, category: '커피', name: '바닐라 라떼', price: 5500, status: '판매중', image: '☕️' },
-    { id: 4, category: '커피', name: '콜드브루', price: 5000, status: '품절', image: '🧊' },
-    { id: 5, category: '디저트', name: '초코무스 케이크', price: 6500, status: '판매중', image: '🍰' },
-    { id: 6, category: '음료', name: '자몽 에이드', price: 5500, status: '판매중', image: '🍹' }
+import { formatPrice } from '../../js/utils.js';
+
+// 주문 상태 정의
+const ORDER_STATUSES = ['주문 완료', '준비중', '준비 완료'];
+
+// 날짜 포맷팅 함수
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+}
+
+// 기본 주문 데이터 (localStorage가 비어있을 때 사용)
+const defaultOrders = [
+    {
+        id: 1,
+        orderTime: new Date().toISOString(),
+        items: [
+            { name: '아메리카노', quantity: 2 },
+            { name: '초코무스 케이크', quantity: 1 }
+        ],
+        totalPrice: 15500,
+        status: ORDER_STATUSES[0] // 주문 완료
+    },
+    {
+        id: 2,
+        orderTime: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+        items: [
+            { name: '카페 라떼', quantity: 1 }
+        ],
+        totalPrice: 5000,
+        status: ORDER_STATUSES[1] // 준비중
+    }
 ];
 
-// 페이지가 로드될 때 메뉴 목록을 불러오는 함수
-function loadMenus(menusToRender) {
-    let menus;
-    // 인자로 메뉴 목록이 들어오지 않으면 localStorage에서 불러옴
-    if (!menusToRender) {
-        const storedMenus = localStorage.getItem('cafeMenus');
-        if (!storedMenus) {
-            // localStorage가 비어있으면 기본 메뉴로 초기화
-            localStorage.setItem('cafeMenus', JSON.stringify(defaultMenus));
-            menus = defaultMenus;
-        } else {
-            menus = JSON.parse(storedMenus);
-        }
-    } else {
-        menus = menusToRender;
+// 페이지가 로드될 때 주문 목록을 불러오는 함수
+function loadOrders() {
+    const storedOrders = localStorage.getItem('cafeOrders');
+    let orders = storedOrders ? JSON.parse(storedOrders) : defaultOrders;
+
+    // localStorage가 비어있으면 기본 주문으로 초기화
+    if (!storedOrders) {
+        localStorage.setItem('cafeOrders', JSON.stringify(defaultOrders));
     }
 
-    const tbody = document.getElementById('menuTableBody');
+    const tbody = document.getElementById('orderTableBody');
     tbody.innerHTML = ''; // 기존 내용을 비움
 
-    menus.forEach(menu => {
-        const statusClass = menu.status === '판매중' ? 'badge completed' : 'badge pending';
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">현재 주문이 없습니다.</td></tr>';
+        return;
+    }
+    
+    // 최신 주문이 위로 오도록 정렬
+    orders.sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime));
+
+    orders.forEach(order => {
+        const statusClass = getStatusClass(order.status);
+        const menuSummary = order.items.length > 1
+            ? `${order.items[0].name} 외 ${order.items.length - 1}건`
+            : order.items[0].name;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><div class="menu-thumbnail">${menu.image}</div></td>
-            <td><span class="category-tag">${menu.category}</span></td>
-            <td class="menu-name">${menu.name}</td>
-            <td>₩${menu.price.toLocaleString()}</td>
-            <td><span class="${statusClass}">${menu.status}</span></td>
+            <td>#${String(order.id).padStart(4, '0')}</td>
+            <td>${formatDate(order.orderTime)}</td>
+            <td class="menu-name">${menuSummary}</td>
+            <td>${formatPrice(order.totalPrice)}</td>
+            <td><span class="badge ${statusClass}">${order.status}</span></td>
             <td>
-                <button class="btn-small edit" onclick="location.href='edit.html?id=${menu.id}'">수정</button>
-                <button class="btn-small delete" onclick="deleteMenu(${menu.id})">삭제</button>
+                ${generateStatusButtons(order.id, order.status)}
             </td>
         `;
         tbody.appendChild(tr);
     });
 }
 
-// 메뉴 삭제 함수
-function deleteMenu(id) {
-    if(confirm('정말 이 메뉴를 삭제하시겠습니까?')) {
-        let menus = JSON.parse(localStorage.getItem('cafeMenus'));
-        menus = menus.filter(menu => menu.id !== id);
-        localStorage.setItem('cafeMenus', JSON.stringify(menus));
-        loadMenus(); // 목록 새로고침
+// 주문 상태에 따른 CSS 클래스를 반환하는 함수
+function getStatusClass(status) {
+    if (status === '주문 완료') return 'pending';
+    if (status === '준비중') return 'processing';
+    if (status === '준비 완료') return 'completed';
+    return '';
+}
+
+// 주문 상태 변경 버튼을 생성하는 함수
+function generateStatusButtons(orderId, currentStatus) {
+    const currentIndex = ORDER_STATUSES.indexOf(currentStatus);
+    let buttonsHtml = '';
+
+    if (currentIndex < ORDER_STATUSES.length - 1) {
+        const nextStatus = ORDER_STATUSES[currentIndex + 1];
+        buttonsHtml += `<button class="btn-small edit" onclick="updateOrderStatus(${orderId}, '${nextStatus}')">${nextStatus}으로</button>`;
+    }
+    
+    if (currentIndex > 0) {
+        const prevStatus = ORDER_STATUSES[currentIndex - 1];
+        buttonsHtml += `<button class="btn-small delete" onclick="updateOrderStatus(${orderId}, '${prevStatus}')">이전으로</button>`;
+    }
+    
+    return buttonsHtml;
+}
+
+// 주문 상태 업데이트 함수
+window.updateOrderStatus = function(orderId, newStatus) {
+    let orders = JSON.parse(localStorage.getItem('cafeOrders'));
+    const orderIndex = orders.findIndex(o => o.id === orderId);
+
+    if (orderIndex !== -1) {
+        orders[orderIndex].status = newStatus;
+        localStorage.setItem('cafeOrders', JSON.stringify(orders));
+        loadOrders(); // 목록 새로고침
     }
 }
 
-// 검색 기능
-document.getElementById('searchInput').addEventListener('keyup', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const menus = JSON.parse(localStorage.getItem('cafeMenus'));
-    const filteredMenus = menus.filter(menu => menu.name.toLowerCase().includes(searchTerm));
-    loadMenus(filteredMenus); // 필터링된 결과로 목록 다시 렌더링
+// --- 초기화 및 실시간 업데이트 ---
+
+// 2초마다 주문 목록을 새로고침하여 실시간처럼 보이게 함
+setInterval(loadOrders, 2000);
+
+// 다른 탭에서 localStorage가 변경되었을 때 목록을 새로고침
+window.addEventListener('storage', function(e) {
+    if (e.key === 'cafeOrders') {
+        loadOrders();
+    }
 });
 
 // 페이지 첫 로드 시 실행
-document.addEventListener('DOMContentLoaded', () => loadMenus());
+document.addEventListener('DOMContentLoaded', loadOrders);
