@@ -111,4 +111,41 @@ const renderCart = () => {
 // 초기 렌더링
 document.addEventListener('DOMContentLoaded', () => {
     renderCart();
+
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            if (basketItems.length === 0) {
+                alert('장바구니가 비어있습니다.');
+                return;
+            }
+
+            // 주문 배열 관리: localStorage를 사용하여 임시 데이터 1개 추가
+            let orders = JSON.parse(localStorage.getItem('cafe_orders') || '[]');
+            
+            // 총액 및 할인 계산
+            let subtotal = 0;
+            basketItems.forEach(item => {
+                subtotal += item.price * item.quantity;
+            });
+            let discount = subtotal >= 15000 ? subtotal * 0.1 : 0;
+            let total = subtotal - discount;
+
+            const newOrder = {
+                id: Date.now().toString(),
+                orderDate: new Date().toISOString(),
+                items: JSON.parse(JSON.stringify(basketItems)),
+                subtotal: subtotal,
+                discount: discount,
+                totalAmount: total,
+                status: '주문완료'
+            };
+
+            orders.push(newOrder);
+            localStorage.setItem('cafe_orders', JSON.stringify(orders));
+
+            alert('주문이 완료되었습니다!');
+            window.location.href = '../orders/list.html';
+        });
+    }
 });
