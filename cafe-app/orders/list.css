@@ -1,13 +1,13 @@
 :root {
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --secondary-color: #ec4899;
-    --bg-color: #f8fafc;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: rgba(255, 255, 255, 0.4);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    --primary-color: #8b5a2b; /* 따뜻한 브라운 */
+    --primary-hover: #6b4423;
+    --secondary-color: #d2b48c; /* 크림 톤 */
+    --bg-color: #fdfbf7;
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --text-main: #3e2723;
+    --text-muted: #795548;
+    --border-color: rgba(139, 90, 43, 0.15);
+    --glass-shadow: 0 8px 32px 0 rgba(139, 90, 43, 0.05);
 }
 
 * {
@@ -20,8 +20,10 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
-    margin: 0;
-    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
     position: relative;
     overflow-x: hidden;
 }
@@ -35,234 +37,183 @@ body {
     height: 100vh;
     z-index: -1;
     background-image: 
-        radial-gradient(at 40% 20%, hsla(250,100%,74%,0.4) 0px, transparent 50%),
-        radial-gradient(at 80% 0%, hsla(189,100%,56%,0.4) 0px, transparent 50%),
-        radial-gradient(at 0% 50%, hsla(355,100%,93%,0.4) 0px, transparent 50%);
+        radial-gradient(at 40% 20%, hsla(30,50%,90%,0.6) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(40,40%,85%,0.6) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(20,50%,95%,0.6) 0px, transparent 50%),
+        radial-gradient(at 80% 50%, hsla(35,60%,90%,0.6) 0px, transparent 50%);
     filter: blur(40px);
     opacity: 0.8;
 }
 
-.app-container {
-    max-width: 480px;
-    margin: 0 auto;
-    min-height: 100vh;
-    background: transparent;
-    position: relative;
-    padding-bottom: 90px; /* nav padding */
+.container {
+    width: 100%;
+    max-width: 900px;
+    padding: 60px 20px;
 }
 
-.header {
+.page-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.header-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.back-btn {
+    position: absolute;
+    left: 0;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 500;
     display: flex;
     align-items: center;
-    padding: 20px 16px;
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    gap: 8px;
+    transition: color 0.3s ease;
 }
 
-.btn-back {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid var(--border-color);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    font-size: 16px;
+.back-btn:hover {
+    color: var(--primary-color);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
     color: var(--text-main);
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    gap: 15px;
 }
 
-.btn-back:active {
-    transform: scale(0.9);
+.page-header h1 i {
+    color: var(--primary-color);
 }
 
-.header h1 {
-    flex: 1;
-    font-size: 1.25rem;
-    text-align: center;
-    margin: 0;
-    font-weight: 700;
-}
-
-.spacer { width: 36px; }
-
-.main-content {
-    padding: 20px 16px;
-}
-
-/* 탭 필터 */
-.filter-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.filter-btn {
-    flex: 1;
-    padding: 10px 0;
-    border: 1px solid var(--border-color);
-    background: rgba(255,255,255,0.4);
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 600;
+.page-header .subtitle {
+    font-size: 1.1rem;
     color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
 }
 
-.filter-btn.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-}
-
-.order-list {
+.orders-layout {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 30px;
 }
 
-/* Glassmorphism 주문 카드 스타일 */
-.order-card {
+.orders-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Glassmorphism Card Style */
+.glass-panel {
     background: var(--card-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 20px;
     box-shadow: var(--glass-shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+    padding: 25px;
+    transition: all 0.3s ease;
 }
 
-.order-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 5px;
-    background: var(--primary-color);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.order-card:hover {
+.glass-panel:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.1);
+    box-shadow: 0 12px 30px rgba(139, 90, 43, 0.08);
 }
 
-.order-card:hover::before {
-    opacity: 1;
+.order-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.order-card-header {
+.order-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 15px;
 }
 
 .order-date {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 1.1rem;
 }
 
 .order-status {
-    font-size: 0.8rem;
-    font-weight: 700;
     padding: 6px 12px;
     border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: var(--primary-color);
+    color: white;
 }
 
-/* 상태별 색상 */
-.status-ready { background: rgba(16, 185, 129, 0.15); color: #059669; }
-.status-preparing { background: rgba(245, 158, 11, 0.15); color: #d97706; }
-.status-complete { background: rgba(100, 116, 139, 0.15); color: #475569; }
-
-.order-details-row {
+.order-body {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-top: 15px;
+    align-items: center;
 }
 
 .order-summary {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-main);
-}
-
-.order-price {
-    font-size: 1.2rem;
-    color: var(--secondary-color);
-    font-weight: 700;
-}
-
-.empty-msg {
-    text-align: center;
     color: var(--text-muted);
-    margin-top: 50px;
-    font-size: 1.1rem;
 }
 
-/* 하단 네비게이션 (Glassmorphism) */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 480px;
-    height: 70px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    display: flex;
-    border-top: 1px solid var(--border-color);
-    border-radius: 25px 25px 0 0;
-    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.05);
-    z-index: 100;
-}
-
-.bottom-nav a {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    flex-direction: column;
-    gap: 5px;
-    transition: all 0.3s;
-}
-
-.bottom-nav a i {
+.order-total {
     font-size: 1.3rem;
-    transition: transform 0.3s;
-}
-
-.bottom-nav a.active {
-    color: var(--primary-color);
     font-weight: 700;
+    color: var(--primary-color);
 }
 
-.bottom-nav a.active i {
-    transform: translateY(-3px);
+.detail-btn {
+    align-self: flex-end;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.detail-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .back-btn {
+        position: static;
+        align-self: flex-start;
+    }
 }

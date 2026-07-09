@@ -1,48 +1,99 @@
 import { formatPrice } from '../js/utils.js';
 
-// URL 파라미터에서 주문 ID를 추출하여 세부 데이터를 매칭하는 시뮬레이션
-const mockOrderDetailData = {
-    "20260706-001": {
-        id: "20260706-001",
-        statusText: "메뉴를 열심히 만들고 있어요",
-        desc: "완료되면 알림을 보내드릴게요.",
-        items: [
-            { name: "아이스 아메리카노", count: 1, options: "디카페인 / 덜달게", price: 4500 },
-            { name: "크로플", count: 1, options: "아이스크림 추가", price: 4000 }
-        ],
-        totalPrice: 8500
-    }
-};
-
 document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(location.search);
-    const orderId = params.get('id') || "20260706-001"; // 기본값 지정
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('id');
+    const container = document.getElementById('order-detail-content');
+    const subtitle = document.getElementById('order-date-subtitle');
 
-    const orderData = mockOrderDetailData[orderId] || mockOrderDetailData["20260706-001"];
+    if (!orderId) {
+        showError('유효하지 않은 접근입니다.');
+        return;
+    }
+
+    const orders = JSON.parse(localStorage.getItem('cafe_orders') || '[]');
+    const order = orders.find(o => o.id === orderId);
+
+    if (!order) {
+        showError('주문 정보를 찾을 수 없습니다.');
+        return;
+    }
+
+    const dateObj = new Date(order.orderDate);
+    const dateString = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일 ${dateObj.getHours()}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
     
-    renderOrderDetail(orderData);
-});
+    subtitle.textContent = `주문 일시: ${dateString}`;
 
-function renderOrderDetail(data) {
-    document.getElementById('order-id').innerText = data.id;
-    document.getElementById('order-status-text').innerText = data.statusText;
-    
-    const itemsContainer = document.getElementById('order-items-list');
-    itemsContainer.innerHTML = '';
-
-    data.items.forEach(item => {
-        const itemRow = document.createElement('div');
-        itemRow.className = 'item-row';
-        itemRow.innerHTML = `
-            <div>
-                <div><strong>${item.name}</strong> x ${item.count}개</div>
-                <div class="item-options">${item.options}</div>
-            </div>
-            <div>${formatPrice(item.price * item.count)}</div>
+    let itemsHtml = '';
+    order.items.forEach(item => {
+        itemsHtml += `
+            <li class="item-card">
+                <div class="item-main">
+                    <div class="item-icon">
+                        <i class="fa-solid ${item.icon || 'fa-mug-hot'}"></i>
+                    </div>
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <p>${formatPrice(item.price || 0)} x ${item.quantity || 1}개</p>
+                    </div>
+                </div>
+                <div class="item-price-total">
+                    ${formatPrice((item.price || 0) * (item.quantity || 1))}
+                </div>
+            </li>
         `;
-        itemsContainer.appendChild(itemRow);
     });
 
-    document.getElementById('sub-price').innerText = formatPrice(data.totalPrice);
-    document.getElementById('total-price').innerText = formatPrice(data.totalPrice);
-}
+    container.innerHTML = `
+        <div class="glass-panel">
+            <div class="order-info-section">
+                <h3 class="section-title">주문 정보</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">주문 번호</span>
+                        <span class="info-value">${order.id}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">주문 상태</span>
+                        <span class="info-value" style="color: var(--primary-color);">${order.status || '주문완료'}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-items-section">
+                <h3 class="section-title">주문 메뉴</h3>
+                <ul class="item-list">
+                    ${itemsHtml}
+                </ul>
+            </div>
+
+            <div class="order-summary-section">
+                <div class="summary-row">
+                    <span>상품 금액</span>
+                    <span>${formatPrice(order.subtotal || order.totalAmount || 0)}</span>
+                </div>
+                <div class="summary-row">
+                    <span>할인 금액</span>
+                    <span class="highlight">-${formatPrice(order.discount || 0)}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>총 결제 금액</span>
+                    <span>${formatPrice(order.totalAmount || 0)}</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    function showError(message) {
+        subtitle.textContent = '오류 발생';
+        container.innerHTML = `
+            <div class="glass-panel error-state">
+                <h3><i class="fa-solid fa-circle-exclamation"></i></h3>
+                <p>${message}</p>
+                <a href="list.html" class="back-btn" style="position:static; justify-content:center; margin-top:20px;">
+                    목록으로 돌아가기
+                </a>
+            </div>
+        `;
+    }
+});
